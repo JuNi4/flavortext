@@ -756,10 +756,17 @@ static const char* c[] = {
     " (running on MS DOS)",
 };
 
+unsigned long seed = 0;
+
 
 char* flavortext()
 {
-    unsigned long seed = time(0);
+    // make sure the seed is correct
+    if (seed == 0)
+    {
+        seed = time(0);
+    }
+    seed += 5;
 
     const char* wa = a[rand() % (sizeof(a) / sizeof(*a))];
     const char* wb = b[rand() % (sizeof(b) / sizeof(*b))];
@@ -778,10 +785,12 @@ char* flavortext()
     }
     #endif
 
+    // create the output string
     size_t out_size = sizeof(char) * (strlen(wa) + strlen(wb) + (doC? strlen(wc) : 0) + 5);
     char* out = (char*)malloc(out_size);
     memset(out, ' ', out_size);
 
+    // byte index
     size_t bi = 0;
 
     // write first part
@@ -792,13 +801,16 @@ char* flavortext()
     memcpy(out + bi, wb, strlen(wb));
     bi += strlen(wb);
 
+    // third part
     if (doC)
     {
         memcpy(out + bi, wc, strlen(wc));
         bi += strlen(wc);
     }
 
+    // '...' at the end
     memcpy(out + bi, "...", 3);
+    // null byte terminator
     out[bi + 3] = 0;
 
     return out;
