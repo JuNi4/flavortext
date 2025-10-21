@@ -765,8 +765,8 @@ char* flavortext()
     if (seed == 0)
     {
         seed = time(0);
+        srand(seed);
     }
-    seed += 5;
 
     const char* wa = a[rand() % (sizeof(a) / sizeof(*a))];
     const char* wb = b[rand() % (sizeof(b) / sizeof(*b))];
